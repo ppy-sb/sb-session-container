@@ -8,7 +8,5 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "sb-shared-state": "github:ppy-sb/sb-shared-state"
-  }
+  "dependencies": {}
 }

@@ -1,5 +1,4 @@
 // const db = require('../../controllers/db')
-const shared = require('sb-shared-state')
 function Store(container) {
     this.pendingPackets = []
     this.container = container
