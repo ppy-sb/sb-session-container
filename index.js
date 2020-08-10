@@ -38,7 +38,6 @@ class SessionContainer {
         req.token = session.id
         session.onUpdate()
         await this.debounceSession(req)
-        return session
     }
 
     fromToken(req, res, next) {
@@ -75,7 +74,7 @@ class SessionContainer {
         let timer
         const session = await this.getSession({ id: req.token })
         Object.defineProperty(req, "session", {
-            get: async () => {
+            get: () => {
                 if (timer) {
                     clearTimeout(timer)
                     console.info(`Timeout of Session for ${session.user.name} reset, session(${session.id})`)
