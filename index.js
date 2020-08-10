@@ -53,7 +53,7 @@ class SessionContainer {
             return next(new NoSessionError())
         }
         await this.debounceSession(req)
-        console.info(`Session for ${req.session.user.username} resumed, session(${req.session.id})`)
+        console.info(`Session for ${req.session.user.name} resumed, session(${req.session.id})`)
         next()
     }
 
