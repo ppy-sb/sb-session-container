@@ -38,6 +38,7 @@ class SessionContainer {
         req.token = session.id
         session.onUpdate()
         await this.debounceSession(req)
+        return session
     }
 
     fromToken(req, res, next) {
