@@ -22,8 +22,8 @@ class SessionContainer {
         // _session.user = await this.UserModel.findOne(_session.user).exec()
         // console.log(_session)
         // if (!this.getSession(_session)) 
-        this.sessions.set(session.id, session)
-        return session
+        this.sessions.set(session.id, _session)
+        return _session
     }
 
     dbGetSession({ id }) {
