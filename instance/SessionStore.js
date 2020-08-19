@@ -11,7 +11,7 @@ Store.prototype.flushPendingPackets = function () {
 }
 
 Store.prototype.onUpdate = function () {
-    const SessionModel = this.container.model
+    const SessionModel = this.container.SessionModel
     setImmediate(() => SessionModel.findOneAndUpdate({ id: this.id }, this, { upsert: true }, err => { if (err) console.warn(err) }))
     console.info(`Cloud session for ${this.user.name} updated, session(${this.id})`)
 }
