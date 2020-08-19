@@ -28,7 +28,7 @@ class SessionContainer {
     }
 
     dbGetSession({ id }) {
-        return this.SessionModel.findOne({ id }).exec()
+        return this.SessionModel.findOne({ id }).exec().then(res => res.toObject())
     }
 
     destroy(session) {
