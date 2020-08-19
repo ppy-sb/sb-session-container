@@ -75,6 +75,11 @@ class SessionContainer {
         next()
     }
 
+    removeResumedSessionFlag(req, res, next) {
+        delete req.session.resumed
+        next()
+    }
+
     nextRouteIfHasSession(req, res, next) {
         if (req.session) return next("route")
         next()
