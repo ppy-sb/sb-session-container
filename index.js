@@ -4,7 +4,7 @@ const APP_NAMESPACE = '9f4750c8-c940-11ea-87d0-0242ac130003'
 const createSessionStore = require('./instance/SessionStore')
 const NoSessionError = require('./errors/NoSessionError')
 class SessionContainer {
-    constructor({Session}) {
+    constructor({ Session }) {
         this.sessions = new Map
         this.model = Session
         Object.getOwnPropertyNames(SessionContainer.prototype)
@@ -47,8 +47,8 @@ class SessionContainer {
 
     async continue(req, res, next) {
         if (!req.token) return next('route') // @arily next('route')和next()不同 同一条路由后面的中间件会被跳过.
-        if (!(this.sessions.has(req.token))) {
-            // const session = this.restoreSessionFromDB({ id: req.token })
+        const session = await this.getSession({ id: req.token })
+        if (!session) {
             return next(new NoSessionError())
         }
         await this.debounceSession(req)
