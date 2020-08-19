@@ -17,7 +17,7 @@ class SessionContainer {
     }
 
     async cacheAndReturnDbSession(session) {
-        const _session = await this.dbGetSession()
+        const _session = await this.dbGetSession(session)
         if (!this.getSession(_session)) this.sessions.set(session.id, session)
         return session
     }
@@ -90,9 +90,9 @@ class SessionContainer {
     }
 
     handleSessionError(err, req, res, next) {
-        console.log(err)
+        // console.log(err)
         if (!err.name == 'NoSessionError') return next()
-        // console.log('NoSessionError!')
+        console.log('NoSessionError!', req.token)
     }
 }
 
