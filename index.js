@@ -4,9 +4,10 @@ const APP_NAMESPACE = '9f4750c8-c940-11ea-87d0-0242ac130003'
 const createSessionStore = require('./instance/SessionStore')
 const NoSessionError = require('./errors/NoSessionError')
 class SessionContainer {
-    constructor({ Session }) {
+    constructor({ Session, User }) {
         this.sessions = new Map
-        this.model = Session
+        this.SessionModel = Session
+        this.UserModel = User
         Object.getOwnPropertyNames(SessionContainer.prototype)
             .filter((propertyName) => propertyName !== 'constructor')
             .forEach((method) => (this[method] = this[method].bind(this)))
@@ -18,12 +19,14 @@ class SessionContainer {
 
     async cacheAndReturnDbSession(session) {
         const _session = await this.dbGetSession(session)
-        if (!this.getSession(_session)) this.sessions.set(session.id, session)
+        _session.user = await this.UserModel.findOne(_session.user).exec()
+        // if (!this.getSession(_session)) 
+        this.sessions.set(session.id, session)
         return session
     }
 
     dbGetSession({ id }) {
-        return this.model.findOne({ id }).exec()
+        return this.SessionModel.findOne({ id }).exec()
     }
 
     destroy(session) {
@@ -48,9 +51,8 @@ class SessionContainer {
     async continue(req, res, next) {
         if (!req.token) return next('route') // @arily next('route')和next()不同 同一条路由后面的中间件会被跳过.
         const session = await this.getSession({ id: req.token })
-        if (!session) {
-            return next(new NoSessionError())
-        }
+        if (!session) return next(new NoSessionError())
+        if (!session.user) return next(new NoSessionError('user undefined'))
         await this.debounceSession(req)
         console.info(`Session for ${req.session.user.name} resumed, session(${req.session.id})`)
         next()
@@ -81,7 +83,7 @@ class SessionContainer {
                 }
                 timer = setTimeout(() => {
                     console.info(`Session for ${session.user.name} expired, removing it ... session(${session.id})`)
-                    this.model.deleteOne({ id: session.id }, err => { if (err) console.warn(err) })
+                    this.SessionModel.deleteOne({ id: session.id }, err => { if (err) console.warn(err) })
                     if (this.getSession({ id: req.token })) this.destroy(session)
                 }, 1000 * 60 * 60 * 24) // 1d 
                 return session
