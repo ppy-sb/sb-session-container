@@ -19,8 +19,8 @@ class SessionContainer {
 
     async cacheAndReturnDbSession(session) {
         const _session = await this.dbGetSession(session)
-        _session.user = await this.UserModel.findOne(_session.user).exec()
-        console.log(_session)
+        // _session.user = await this.UserModel.findOne(_session.user).exec()
+        // console.log(_session)
         // if (!this.getSession(_session)) 
         this.sessions.set(session.id, session)
         return session
