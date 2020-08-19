@@ -20,6 +20,7 @@ class SessionContainer {
     async cacheAndReturnDbSession(session) {
         let _session = await this.dbGetSession(session)
         _session = createSessionStore(_session, this)
+        _session.resumed = true
         // _session.user = await this.UserModel.findOne(_session.user).exec()
         // console.log(_session)
         // if (!this.getSession(_session)) 
@@ -66,6 +67,11 @@ class SessionContainer {
 
     nextRouteIfNoSession(req, res, next) {
         if (!req.session) return next("route")
+        next()
+    }
+
+    nextRouteIfNotResumedSession(req, res, next) {
+        if (!req.session.resumed) return next("route")
         next()
     }
 
