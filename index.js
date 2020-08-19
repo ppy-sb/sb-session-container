@@ -94,7 +94,7 @@ class SessionContainer {
     handleSessionError(err, req, res, next) {
         // console.log(err)
         if (!err.name == 'NoSessionError') return next()
-        console.log('NoSessionError!', req.token)
+        console.log('NoSessionError!', err.message, req.token)
     }
 }
 
