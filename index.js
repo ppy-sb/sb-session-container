@@ -1,4 +1,3 @@
-// @ts-check
 const { v4: uuidv4 } = require('uuid');
 const APP_NAMESPACE = '9f4750c8-c940-11ea-87d0-0242ac130003'
 
