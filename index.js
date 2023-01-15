@@ -1,3 +1,4 @@
+// @ts-check
 const { v4: uuidv4 } = require('uuid');
 const APP_NAMESPACE = '9f4750c8-c940-11ea-87d0-0242ac130003'
 
@@ -13,10 +14,10 @@ class SessionContainer {
      * Create SessionContaner instance
      * @param {sb-db} database 
      */
-    constructor({ Session, User }) {
+    constructor() {
         this.sessions = new Map
-        this.SessionModel = Session
-        this.UserModel = User
+        // this.SessionModel = Session
+        // this.UserModel = User
         Object.getOwnPropertyNames(SessionContainer.prototype)
             .filter((propertyName) => propertyName !== 'constructor')
             .forEach((method) => (this[method] = this[method].bind(this)))
@@ -61,10 +62,11 @@ class SessionContainer {
      * @returns {Object} session data
      */
     dbGetSession({ id }) {
-        return this.SessionModel.findOne({ id }).exec().then(res => {
-            if (!res) return res
-            return res.toObject()
-        })
+        return undefined
+        // return this.SessionModel.findOne({ id }).exec().then(res => {
+        //     if (!res) return res
+        //     return res.toObject()
+        // })
     }
 
     /**
@@ -91,7 +93,7 @@ class SessionContainer {
                 }
                 timer = setTimeout(() => {
                     console.info(`Session for ${session.user.name} expired, removing it ... session(${session.id})`)
-                    this.SessionModel.deleteOne({ id: session.id }, err => { if (err) console.warn(err) })
+                    // this.SessionModel.deleteOne({ id: session.id }, err => { if (err) console.warn(err) })
                     if (this.getSession({ id: req.token })) this.destroy(session)
                 }, 1000 * 60 * 60 * 24) // 1d 
                 return session
